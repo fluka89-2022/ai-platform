@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(cc-skills-golang:golang-observability)",
+      "Skill(cc-skills-golang:golang-performance)",
+      "Skill(gitlab-author-skills)",
+      "Skill(superpowers:dispatching-parallel-agents)",
+      "Bash(go *)",
+      "Bash(golangci-lint *)",
+      "Bash(glab *)",
+      "Bash(git *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(govulncheck *)",
+      "Bash(git-chglog *)",
+      "Read",
+      "Write",
+      "Edit",
+      "Grep",
+      "Glob",
+      "WebSearch"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "awaySummaryEnabled": false
+}

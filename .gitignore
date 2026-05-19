@@ -1,0 +1,5 @@
+# Cartella di lavoro sperimentale — non fa parte del repo
+experiment/
+
+# macOS
+.DS_Store
