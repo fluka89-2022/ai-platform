@@ -61,7 +61,15 @@ Show the proposed name and wait for confirmation before creating it.
 
 ### 3.2 Explore the code
 
-Read files referenced in the issue (stack traces, paths, symbols). Use Read, Grep, Glob silently — no intermediate output.
+Identify all independent domains referenced in the issue (stack traces, paths, symbols, package names). If there are 2 or more independent domains, dispatch one `Explore` agent per domain **in parallel** using the `Agent` tool with `subagent_type=Explore`. Each agent gets:
+
+- A focused scope (one file, one symbol, one package).
+- A self-contained prompt with the relevant excerpt from the issue.
+- A specific output request: "Report where X is defined and which files reference it."
+
+Wait for all agents to return, then consolidate findings before proceeding.
+
+If only one domain is referenced, use Read, Grep, Glob directly — no agents needed.
 
 ### 3.3 Execution plan (if tasks are already listed)
 
@@ -91,9 +99,12 @@ For each task:
 
 1. Write the failing test.
 2. Run it and confirm it fails.
-3. Write the minimum implementation to make it pass.
-4. Refactor without changing behavior.
-5. Ask before moving to the next task:
+3. Identify which files need to change for the implementation.
+   - If 2 or more files are **independent** (no shared state, no edit on the same file), dispatch one agent per file **in parallel** using the `Agent` tool. Each agent gets: the file path, the failing test as context, and a specific instruction ("add/change X so the test passes"). Agents must not touch the test file.
+   - If only one file is involved, implement directly.
+4. Run the test and confirm it passes.
+5. Refactor without changing behavior.
+6. Ask before moving to the next task:
    > "Task [n] completato: `[test name]` passa. Continuo con il task [n+1]?"
 
 ### 3.5 Completion checklist
@@ -132,9 +143,13 @@ git checkout -b feature/N-short-description
 
 Show and wait for confirmation before creating.
 
-### 4.2 Technical design (inline)
+### 4.2 Explore the code and produce the technical design
 
-Produce in chat:
+**Exploration (parallel):** Identify the independent components/packages mentioned in the issue. If there are 2 or more, dispatch one `Explore` agent per component **in parallel** using the `Agent` tool with `subagent_type=Explore`. Each agent gets a focused scope and returns: where the component is defined, its public interface, and which files reference it.
+
+Wait for all agents to return, then consolidate findings.
+
+**Technical design (inline):** Produce in chat:
 
 - Components involved and their responsibilities.
 - Main changes (files, interfaces, data structures).
