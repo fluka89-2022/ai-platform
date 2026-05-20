@@ -96,7 +96,6 @@ Update `updated` on every revision. Additional fields by document type:
 - Sentence case headings, no trailing period.
 - Proper nouns and acronyms keep their standard capitalisation.
 - `---` between `##` sections when more than three. No `***` or `___`.
-- 100 characters max per text line. No limit for code blocks and table cells.
 
 ---
 
