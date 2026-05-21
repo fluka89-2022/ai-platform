@@ -79,6 +79,34 @@ Show the choice in the draft gate.
 
 Mermaid labels: descriptive names in Italian, code identifiers in English.
 
+### 4b. Naming convention — titolo
+
+Apply this rule before drafting the title:
+
+```text
+<componente>: <descrizione del problema o obiettivo>
+```
+
+- **Lingua:** italiano; identificatori di codice (struct, package, funzioni) in inglese
+- **Formato:** nominale/descrittivo — non imperativo
+- **Lunghezza:** massimo 72 caratteri
+- **Componente:** area tecnica o modulo coinvolto
+  - identificatore di codice → inglese (es. `ServiceExecutor`, `go.mod`)
+  - area funzionale → italiano (es. `autenticazione`, `scraper AWS`)
+  - preferibilmente non il nome del servizio/repository (già espresso da label/milestone); accettabile se non esiste un componente più specifico
+- **Nessun prefisso** per tipo o servizio: sono gestiti da label e milestone
+
+Esempi:
+
+| Tipo | Titolo |
+| --- | --- |
+| `bug` | `ServiceExecutor: goroutine leak in RunServices senza recover` |
+| `bug` | `Elasticsearch client: connessione non chiusa alla shutdown` |
+| `feature` | `Inventory API: filtro risorse per tag cloud` |
+| `technical-debt` | `go.mod: dipendenze non aggiornate a Go 1.22` |
+| `technical-debt` | `ConfigLoader: accoppiamento diretto a viper senza interfaccia` |
+| `documentation` | `aws-scraper: README mancante per setup locale` |
+
 ### 5. Draft gate
 
 Show the complete draft in chat. Do NOT publish yet. Ask for explicit confirmation:

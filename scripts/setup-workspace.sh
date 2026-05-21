@@ -30,18 +30,41 @@ fi
 ln -sf "$AI_PLATFORM_DIR/commands" "$COMMANDS_LINK"
 echo "  ✓ commands → $AI_PLATFORM_DIR/commands"
 
-# Symlink skills directory
-SKILLS_LINK="$WORKSPACE_DIR/.claude/skills"
-if [ -L "$SKILLS_LINK" ]; then
-  echo "  skills symlink already exists — updating"
-  rm "$SKILLS_LINK"
-elif [ -d "$SKILLS_LINK" ]; then
-  echo "  ERROR: $SKILLS_LINK exists as a real directory, not a symlink."
-  echo "  Please remove or rename it manually, then re-run this script."
-  exit 1
+# Skills directory — real dir with per-skill symlinks so sub-skills are discoverable
+SKILLS_DIR="$WORKSPACE_DIR/.claude/skills"
+
+if [ -L "$SKILLS_DIR" ]; then
+  echo "  skills was a single symlink — converting to per-skill symlinks"
+  rm "$SKILLS_DIR"
 fi
-ln -sf "$AI_PLATFORM_DIR/skills" "$SKILLS_LINK"
-echo "  ✓ skills → $AI_PLATFORM_DIR/skills"
+
+mkdir -p "$SKILLS_DIR"
+
+ln -sf "$AI_PLATFORM_DIR/skills/INDEX.md" "$SKILLS_DIR/INDEX.md"
+echo "  ✓ skills/INDEX.md"
+
+for skill_dir in "$AI_PLATFORM_DIR/skills"/*/; do
+  [ -d "$skill_dir" ] || continue
+  skill_name=$(basename "$skill_dir")
+
+  if [ -f "$skill_dir/SKILL.md" ]; then
+    target="$SKILLS_DIR/$skill_name"
+    [ -L "$target" ] && rm "$target"
+    ln -s "$skill_dir" "$target"
+    echo "  ✓ skill: $skill_name"
+  fi
+
+  for sub_dir in "$skill_dir"*/; do
+    [ -d "$sub_dir" ] || continue
+    [ -f "$sub_dir/SKILL.md" ] || continue
+    sub_name=$(basename "$sub_dir")
+    flat_name="${skill_name}-${sub_name}"
+    target="$SKILLS_DIR/$flat_name"
+    [ -L "$target" ] && rm "$target"
+    ln -s "$sub_dir" "$target"
+    echo "  ✓ sub-skill: $flat_name"
+  done
+done
 
 # Copy settings.json if not present
 SETTINGS_FILE="$WORKSPACE_DIR/.claude/settings.json"
