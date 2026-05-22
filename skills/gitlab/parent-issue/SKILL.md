@@ -54,7 +54,7 @@ cd "$REPO_ROOT" && glab issue view <N> --output json
 Estrarre per ogni issue:
 - `iid`: numero dell'issue
 - `title`: titolo
-- `webUrl`: URL completo
+- `web_url`: URL completo
 - `labels`: lista label (usata per derivare la severità)
 - `description`: primi 120 caratteri, usati come descrizione sintetica
 
@@ -64,11 +64,11 @@ Cercare nelle label di ogni issue:
 - `severity::alta`, `severity::media`, `severity::bassa`
 - `priority::high` → `alta`, `priority::medium` → `media`, `priority::low` → `bassa`
 
-Se nessuna label corrisponde, chiedere all'utente:
+Se nessuna label corrisponde per una o più issue, raccogliere tutti i casi mancanti e chiedere in un unico messaggio:
 
-> "L'issue #NNN non ha un label di severità. Che severità assegni? (alta / media / bassa)"
+> "Le issue #NNN, #MMM non hanno un label di severità. Che severità assegni? (alta / media / bassa per ciascuna)"
 
-Se l'utente non fornisce risposta, lasciare la cella severità vuota e continuare con le altre issue.
+Se l'utente non fornisce risposta per una issue, lasciare la cella severità vuota e continuare.
 
 ### 3. Proposta AMBITO
 

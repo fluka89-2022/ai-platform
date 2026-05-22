@@ -46,7 +46,8 @@ skills/
     ├── issue/SKILL.md
     ├── mr/SKILL.md
     ├── milestone/SKILL.md
-    └── resolve/SKILL.md
+    ├── resolve/SKILL.md
+    └── parent-issue/SKILL.md
 ```
 
 ## External plugins

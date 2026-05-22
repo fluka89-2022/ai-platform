@@ -79,7 +79,7 @@ To create or publish GitLab artifacts, load the relevant sub-skill before procee
 | Artifact | Sub-skill (`Skill(...)`) |
 | --- | --- |
 | Issue (bug / feature / technical-debt / documentation) | `gitlab-issue` |
-| Issue padre (raggruppamento issue correlate) | `gitlab-parent-issue` |
+| Parent issue (group of related issues) | `gitlab-parent-issue` |
 | Merge request | `gitlab-mr` |
 | Milestone | `gitlab-milestone` |
 | Resolve existing issue | `gitlab-resolve` |
