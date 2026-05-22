@@ -129,8 +129,8 @@ Compilare il template `../assets/issue-group.md` con i dati raccolti.
 Mostrare la bozza completa in chat. Non pubblicare ancora. Chiedere conferma esplicita:
 
 > "Bozza pronta. Procedo a creare la issue padre su GitLab con titolo '`<title>`',
-> label `type::parent, todo`, milestone `<milestone|nessuna>`, e a collegare le issue figlie
-> come 'relates to'? (si/modifiche/annulla)"
+> label `kind::parent, todo`, milestone `<milestone|nessuna>`, collegare le issue figlie
+> come 'relates to' e apporvi il label `kind::sub-task`? (si/modifiche/annulla)"
 
 Applicare le modifiche richieste e mostrare nuovamente la bozza. Ripetere fino all'approvazione.
 
@@ -145,7 +145,7 @@ Dopo l'approvazione esplicita:
 ```bash
 cd "$REPO_ROOT" && glab issue create \
   --title "[<AMBITO>]: <descrizione>" \
-  --label "type::parent,todo" \
+  --label "kind::parent,todo" \
   --milestone "<milestone>" \
   --description "$(cat /tmp/issue-group-<slug>.md)"
 ```
@@ -154,9 +154,11 @@ cd "$REPO_ROOT" && glab issue create \
    Memorizzare come `$PARENT_IID`.
 4. Restituire l'URL della issue padre creata.
 
-### 7. Collegamento issue figlie
+### 7. Collegamento e labeling issue figlie
 
-Per ogni issue figlia, eseguire:
+Per ogni issue figlia, eseguire in sequenza:
+
+1. Creare il link con la issue padre:
 
 ```bash
 cd "$REPO_ROOT" && glab api "projects/:id/issues/$PARENT_IID/links" \
@@ -165,15 +167,21 @@ cd "$REPO_ROOT" && glab api "projects/:id/issues/$PARENT_IID/links" \
   -f "link_type=relates_to"
 ```
 
+2. Apporre il label `kind::sub-task` all'issue figlia:
+
+```bash
+cd "$REPO_ROOT" && glab issue update <CHILD_IID> --label "kind::sub-task"
+```
+
 `:id` viene sostituito automaticamente da `glab` con l'ID numerico del progetto corrente.
 
-Ripetere per ogni issue figlia. Al termine, confermare in chat il numero di link creati.
+Ripetere per ogni issue figlia. Al termine, confermare in chat il numero di link creati e di label applicati.
 
 ### Label
 
-La skill propone il label `type::parent`. Se il progetto non usa label scoped, proporre `parent`.
+La skill propone il label `kind::parent`. Se il progetto non usa label scoped, proporre `parent`.
 Il label `todo` viene sempre aggiunto e non è modificabile dall'utente.
-L'utente può sostituire `type::parent` nel draft gate.
+L'utente può sostituire `kind::parent` nel draft gate.
 Il comando `glab issue create` al passo 6 usa i label approvati nel draft gate.
 
 ---
