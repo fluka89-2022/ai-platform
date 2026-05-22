@@ -129,7 +129,7 @@ Compilare il template `../assets/issue-group.md` con i dati raccolti.
 Mostrare la bozza completa in chat. Non pubblicare ancora. Chiedere conferma esplicita:
 
 > "Bozza pronta. Procedo a creare la issue padre su GitLab con titolo '`<title>`',
-> label `type::parent`, milestone `<milestone|nessuna>`, e a collegare le issue figlie
+> label `type::parent, todo`, milestone `<milestone|nessuna>`, e a collegare le issue figlie
 > come 'relates to'? (si/modifiche/annulla)"
 
 Applicare le modifiche richieste e mostrare nuovamente la bozza. Ripetere fino all'approvazione.
@@ -145,7 +145,7 @@ Dopo l'approvazione esplicita:
 ```bash
 cd "$REPO_ROOT" && glab issue create \
   --title "[<AMBITO>]: <descrizione>" \
-  --label "type::parent" \
+  --label "type::parent,todo" \
   --milestone "<milestone>" \
   --description "$(cat /tmp/issue-group-<slug>.md)"
 ```
@@ -172,8 +172,9 @@ Ripetere per ogni issue figlia. Al termine, confermare in chat il numero di link
 ### Label
 
 La skill propone il label `type::parent`. Se il progetto non usa label scoped, proporre `parent`.
-L'utente può sostituirlo nel draft gate.
-Il comando `glab issue create` al passo 6 usa il label approvato nel draft gate.
+Il label `todo` viene sempre aggiunto e non è modificabile dall'utente.
+L'utente può sostituire `type::parent` nel draft gate.
+Il comando `glab issue create` al passo 6 usa i label approvati nel draft gate.
 
 ---
 
