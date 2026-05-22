@@ -129,7 +129,7 @@ Compilare il template `../assets/issue-group.md` con i dati raccolti.
 Mostrare la bozza completa in chat. Non pubblicare ancora. Chiedere conferma esplicita:
 
 > "Bozza pronta. Procedo a creare la issue padre su GitLab con titolo '`<title>`',
-> label `kind::parent, todo`, milestone `<milestone|nessuna>`, collegare le issue figlie
+> label `kind::parent, to-do`, milestone `<milestone|nessuna>`, collegare le issue figlie
 > come 'relates to' e apporvi il label `kind::sub-task`? (si/modifiche/annulla)"
 
 Applicare le modifiche richieste e mostrare nuovamente la bozza. Ripetere fino all'approvazione.
@@ -145,7 +145,7 @@ Dopo l'approvazione esplicita:
 ```bash
 cd "$REPO_ROOT" && glab issue create \
   --title "[<AMBITO>]: <descrizione>" \
-  --label "kind::parent,todo" \
+  --label "kind::parent,to-do" \
   --milestone "<milestone>" \
   --description "$(cat /tmp/issue-group-<slug>.md)"
 ```
@@ -180,7 +180,7 @@ Ripetere per ogni issue figlia. Al termine, confermare in chat il numero di link
 ### Label
 
 La skill propone il label `kind::parent`. Se il progetto non usa label scoped, proporre `parent`.
-Il label `todo` viene sempre aggiunto e non è modificabile dall'utente.
+Il label `to-do` viene sempre aggiunto e non è modificabile dall'utente.
 L'utente può sostituire `kind::parent` nel draft gate.
 Il comando `glab issue create` al passo 6 usa i label approvati nel draft gate.
 
