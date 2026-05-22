@@ -129,7 +129,8 @@ Compilare il template `../assets/issue-group.md` con i dati raccolti.
 Mostrare la bozza completa in chat. Non pubblicare ancora. Chiedere conferma esplicita:
 
 > "Bozza pronta. Procedo a creare la issue padre su GitLab con titolo '`<title>`',
-> label `type::parent`, milestone `<milestone|nessuna>`? (si/modifiche/annulla)"
+> label `type::parent`, milestone `<milestone|nessuna>`, e a collegare le issue figlie
+> come 'relates to'? (si/modifiche/annulla)"
 
 Applicare le modifiche richieste e mostrare nuovamente la bozza. Ripetere fino all'approvazione.
 
@@ -149,7 +150,24 @@ cd "$REPO_ROOT" && glab issue create \
   --description "$(cat /tmp/issue-group-<slug>.md)"
 ```
 
-3. Restituire l'URL della issue padre creata.
+3. Estrarre l'IID della issue padre dall'URL restituito (ultimo segmento numerico).
+   Memorizzare come `$PARENT_IID`.
+4. Restituire l'URL della issue padre creata.
+
+### 7. Collegamento issue figlie
+
+Per ogni issue figlia, eseguire:
+
+```bash
+cd "$REPO_ROOT" && glab api "projects/:id/issues/$PARENT_IID/links" \
+  --method POST \
+  -f "target_issue_iid=<CHILD_IID>" \
+  -f "link_type=relates_to"
+```
+
+`:id` viene sostituito automaticamente da `glab` con l'ID numerico del progetto corrente.
+
+Ripetere per ogni issue figlia. Al termine, confermare in chat il numero di link creati.
 
 ### Label
 
