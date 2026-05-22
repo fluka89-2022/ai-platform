@@ -28,6 +28,7 @@ Invoke with `Skill("<name>")` — only `name` and `description` from frontmatter
 | `gitlab-mr` | Creating a merge request description via glab |
 | `gitlab-milestone` | Creating a milestone via glab |
 | `gitlab-resolve` | Implementing an existing GitLab issue (short or long path by label) |
+| `gitlab-parent-issue` | Creating a parent issue that groups existing issues under a single review artifact |
 
 ## Layout
 
