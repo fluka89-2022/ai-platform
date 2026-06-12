@@ -58,11 +58,22 @@ ask for them one at a time before proceeding.
 
 Fill the template with the gathered context.
 
+**Activity checklist rules:**
+- Activities must describe capabilities or behaviors to introduce, not files to create
+  or functions to write
+- ✓ "Definire le costanti condivise per i campi di log strutturati del servizio"
+- ✓ "Introduce typed context keys and helper getters for cross-layer propagation"
+- ✗ "Creare il file `logfields.go` con le costanti dei campi di log"
+- ✗ "Add `FieldTraceID` and `FieldSpanID` constants to `internal/observability`"
+- If the template or context produces activities with file names or paths, rewrite
+  them at the functional level before including them in the body
+
 Do NOT include code snippets, file paths, or line references anywhere in the issue body,
 regardless of type. These belong in the Technical Spec, not in the issue.
 
 Always add this note at the end of the issue body, for every task.
-Write it in the **same language as the issue body** (Italian if the body is in Italian, English if English, etc.):
+Write it in the **same language as the issue body** (Italian if the body is in Italian,
+English if English, etc.):
 
 > ℹ️ Implementation details (exact files, functions, commands) will be defined in the
 > Technical Spec when this task is picked up. Do not start implementation without it.
@@ -72,7 +83,7 @@ Italian version (use when the issue body is in Italian):
 > ℹ️ I dettagli implementativi (file, funzioni, comandi) saranno definiti nella
 > Technical Spec quando il task viene preso in carico. Non iniziare l'implementazione senza di essa.
 
-If `design_needed` is `yes` or `maybe`, also add the following note (same language rule applies):
+If `design_needed` is `yes` or `maybe`, also add (same language rule applies):
 
 English:
 > ⚠️ An ADR is required before implementation. Run `tech-adr` on this task before
@@ -94,6 +105,8 @@ Before writing, verify:
 - No file paths anywhere in the body (pattern: `path/file.ext` or `path/to/file`)
 - No code snippets with line references
 - No fenced code blocks in the body
+- No file names in activity checklist items (pattern: `*.go`, `*.ts`, `*.py`,
+  `*.js`, `*.md`, or any `name.ext` pattern)
 - impl-spec note must be present at the end of every draft
 - If design_needed is yes or maybe, ADR note must also be present
 
@@ -102,7 +115,8 @@ Fix violations automatically without surfacing them to the user.
 ### 5. Write the draft file
 
 Determine the target directory:
-- If called from `story-workflow`: use the directory passed in context (e.g., `pk-watch/core/api-server/docs/gitlab/`)
+- If called from `story-workflow`: use the directory passed in context
+  (e.g., `pk-watch/core/api-server/docs/gitlab/`)
 - Otherwise: default to `docs/gitlab/`
 
 Create the directory if missing:
@@ -112,7 +126,8 @@ mkdir -p <target-dir>
 ```
 
 Write to `<target-dir>/task_<storyNum>_<slug>.md` where:
-- `<storyNum>` is the parent story issue number (e.g. `task_42_add-api-key-endpoint.md`)
+- `<storyNum>` is the parent story issue number
+  (e.g. `task_42_add-api-key-endpoint.md`)
 - `<slug>` is the first 5–7 words of the title in kebab-case
 - If no parent story is known, use `task_<slug>.md` (omit the number prefix)
 
@@ -132,7 +147,8 @@ created_at: <YYYY-MM-DD>
 <body>
 ```
 
-Always include the `parent_story` field. Set it to the story issue ID if known, otherwise leave empty.
+Always include the `parent_story` field. Set it to the story issue ID if known,
+otherwise leave empty.
 
 ---
 
@@ -150,7 +166,8 @@ Use the absolute path for the script and relative paths (from `<service-path>`) 
 cd /abs/path/to/<service-path> && python /abs/path/to/workspace/ai-platform/skills/gitlab-track/scripts/publish_issues.py docs/gitlab/pending-publish.json
 ```
 
-**`pending-publish.json` paths must be relative to `<service-path>`**, not to the workspace root.
+**`pending-publish.json` paths must be relative to `<service-path>`**,
+not to the workspace root.
 
 Correct:
 ```json
@@ -186,8 +203,8 @@ Then tell the user:
 
 **Stop here. Do not publish until the user explicitly names the tasks to create.**
 
-When the user names which tasks to publish, update `<target-dir>/pending-publish.json` to include
-only the approved files, then run the command above from `<service-path>`.
+When the user names which tasks to publish, update `<target-dir>/pending-publish.json`
+to include only the approved files, then run the command above from `<service-path>`.
 
 Report results as returned by the script.
 

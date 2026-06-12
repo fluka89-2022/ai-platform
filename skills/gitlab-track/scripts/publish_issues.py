@@ -47,24 +47,6 @@ def run(cmd: list[str]) -> str:
     return result.stdout.strip()
 
 
-def get_story_branch(parent_story_id: int) -> str:
-    output = run(["glab", "issue", "view", str(parent_story_id), "--output", "json"])
-    issue = json.loads(output)
-    slug = slugify(issue["title"], max_words=5)
-    return f"story/{parent_story_id}-{slug}"
-
-
-def detect_base_branch() -> str:
-    try:
-        output = run(["git", "branch", "-r"])
-        for line in output.splitlines():
-            if "origin/develop" in line.strip():
-                return "develop"
-    except subprocess.CalledProcessError:
-        pass
-    return "main"
-
-
 def update_frontmatter(path: Path, fm: dict, body: str) -> None:
     content = "---\n" + yaml.dump(fm, default_flow_style=False, allow_unicode=True) + "---\n\n" + body + "\n"
     path.write_text(content)
@@ -77,15 +59,6 @@ def publish_issue(md_path: Path) -> dict:
     labels = fm.get("labels", "")
     milestone = fm.get("milestone", "")
     parent_story = fm.get("parent_story")
-
-    if parent_story:
-        try:
-            base_branch = get_story_branch(int(parent_story))
-        except Exception as e:
-            print(f"  ! Could not resolve story branch for #{parent_story}: {e}. Falling back to default.", file=sys.stderr)
-            base_branch = detect_base_branch()
-    else:
-        base_branch = detect_base_branch()
 
     cmd = ["glab", "issue", "create", "--title", title, "--description", body]
     if labels:
@@ -101,16 +74,11 @@ def publish_issue(md_path: Path) -> dict:
     issue_url = url_match.group(0)
     issue_id = url_match.group(1)
 
-    branch_name = f"task/{issue_id}-{slugify(title)}"
-
-    run(["git", "checkout", "-b", branch_name, base_branch])
-    run(["git", "push", "-u", "origin", branch_name])
-
     if parent_story:
-        project_id = run(["glab", "api", "projects/:id", "--jq", ".id"])
+        project_id = json.loads(run(["glab", "api", "projects/:id"]))["id"]
         run([
             "glab", "api", "--method", "POST",
-            f"projects/:id/issues/{issue_id}/links",
+            f"projects/{project_id}/issues/{issue_id}/links",
             "-f", f"target_project_id={project_id}",
             "-f", f"target_issue_iid={parent_story}",
             "-f", "link_type=relates_to",
@@ -118,11 +86,10 @@ def publish_issue(md_path: Path) -> dict:
 
     fm["status"] = "published"
     fm["gitlab_url"] = issue_url
-    fm["branch"] = branch_name
     fm["published_at"] = str(date.today())
     update_frontmatter(md_path, fm, body)
 
-    return {"file": str(md_path), "issue_url": issue_url, "branch": branch_name, "base_branch": base_branch}
+    return {"file": str(md_path), "issue_url": issue_url}
 
 
 def main() -> None:
@@ -139,7 +106,7 @@ def main() -> None:
         try:
             result = publish_issue(path)
             results.append(result)
-            print(f"  ✓ {result['issue_url']} — branch: {result['branch']} (base: {result['base_branch']})")
+            print(f"  ✓ {result['issue_url']}")
         except Exception as e:
             errors.append({"file": file_path, "error": str(e)})
             print(f"  ✗ {file_path}: {e}", file=sys.stderr)
