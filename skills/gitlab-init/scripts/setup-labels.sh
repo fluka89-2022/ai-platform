@@ -3,13 +3,18 @@ set -euo pipefail
 
 existing=$(glab label list --output json | jq -r '.[].name')
 
+created=0
+skipped=0
+
 create_if_missing() {
   local name="$1" color="$2" desc="$3"
   if echo "$existing" | grep -qxF "$name"; then
     echo "  skip     $name"
+    ((skipped++)) || true
   else
-    glab label create "$name" --color "$color" --description "$desc"
+    glab label create --name "$name" --color "$color" --description "$desc"
     echo "  created  $name"
+    ((created++)) || true
   fi
 }
 
@@ -28,3 +33,6 @@ create_if_missing "type::documentation"  "#428BCA" "Docs update"
 echo "kind::* labels"
 create_if_missing "kind::epic"  "#6F42C1" "Parent epic grouping multiple stories"
 create_if_missing "kind::story" "#9B59B6" "User story under an epic"
+
+echo ""
+echo "Setup complete. Created: ${created} label(s). Already present: ${skipped} label(s)."

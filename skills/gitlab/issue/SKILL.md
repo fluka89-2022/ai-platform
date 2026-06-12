@@ -27,6 +27,18 @@ scoped labels, apply those instead.
 
 ## Workflow
 
+### 0. Locate the repository root
+
+Before running any `glab` command, determine the git repository root for the service being
+discussed. Use the file open in the IDE, the service path from context, or ask once if unclear.
+
+```bash
+git -C <service-path> rev-parse --show-toplevel
+```
+
+Store the result as `$REPO_ROOT`. Prefix **every** subsequent `glab` (and `git`) command with
+`cd "$REPO_ROOT" &&` — never run `glab` from an arbitrary working directory.
+
 ### 1. Identify the type
 
 The user must specify the type. If missing, ask once:
@@ -62,7 +74,7 @@ locations, and collect code snippets. Include 5–20 lines per snippet with `pat
 ### 3b. Suggest milestone
 
 ```bash
-glab milestone list --state active
+cd "$REPO_ROOT" && glab milestone list --state active
 ```
 
 Select the most relevant active milestone. If none applies, leave blank.
@@ -125,7 +137,7 @@ After explicit approval:
 2. Run:
 
 ```bash
-glab issue create \
+cd "$REPO_ROOT" && glab issue create \
   --title "<title>" \
   --label "<label>" \
   --milestone "<milestone>" \

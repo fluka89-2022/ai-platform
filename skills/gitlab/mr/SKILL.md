@@ -34,7 +34,11 @@ Infer the target branch:
 git remote show origin | grep 'HEAD branch'
 ```
 
-If ambiguous, ask explicitly.
+After inferring source and target branches, **always** ask for explicit confirmation before continuing:
+
+> "Branch sorgente: `<current-branch>` → Branch destinazione: `<base-branch>`. Confermo e procedo? (si/modifica/annulla)"
+
+Wait for approval before running any `git log` or `git diff` command.
 
 For diffs with more than 20 files changed: limit snippets to the 3 most significant change areas.
 Add a note in the draft: "diff ampio: evidenziati solo i punti critici".

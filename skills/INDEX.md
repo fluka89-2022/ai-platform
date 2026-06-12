@@ -19,16 +19,29 @@ Invoke with `Skill("<name>")` — only `name` and `description` from frontmatter
 | `codebase-analysis` | Impact analysis, dependency mapping, entry-point discovery |
 | `go-audit` | Auditing a Go module — security, quality, performance, pprof |
 | `go-readme` | Writing or updating a README for a Go service |
+| `changelog` | Generating a Keep a Changelog entry in Italian by comparing two Git branches |
+
+## GitLab standalone skills
+
+| Skill (`name`) | When to invoke |
+| -------------- | -------------- |
+| `gitlab-init` | Initializing a GitLab project with workflow/type/kind labels |
+| `gitlab-track` | Creating a GitLab issue (bug / feature / tech-debt / documentation) via glab |
+| `story-breakdown` | Breaking down a user story into atomic, implementable GitLab tasks with effort estimates |
+| `issue-draft` | Creating GitLab issue draft `.md` files from a task list or a single task description |
+| `story-workflow` | Full story-to-issues pipeline with persistent state (breakdown → draft → review → publish) |
+| `gitlab-review` | Creating or publishing a merge request on GitLab via glab |
+| `gitlab-story` | Creating a story or epic with branch strategy and child issue management |
+| `gitlab-plan` | Creating, updating, or closing a GitLab milestone |
 
 ## GitLab sub-skills (dispatched from `gitlab`)
 
 | Skill (`name`) | When to invoke |
 | -------------- | -------------- |
-| `gitlab-issue` | Creating a GitLab issue (bug / feature / technical-debt / documentation) via glab |
+| `gitlab-issue` | Creating a GitLab issue via glab |
 | `gitlab-mr` | Creating a merge request description via glab |
-| `gitlab-milestone` | Creating a milestone via glab |
+| `gitlab-milestone` | Creating, updating, or closing a milestone via glab |
 | `gitlab-resolve` | Implementing an existing GitLab issue (short or long path by label) |
-| `gitlab-parent-issue` | Creating a parent issue that groups existing issues under a single review artifact |
 
 ## Layout
 
@@ -40,14 +53,21 @@ skills/
 ├── codebase-analysis/SKILL.md
 ├── go-audit/SKILL.md
 ├── go-readme/SKILL.md
+├── changelog/SKILL.md
+├── gitlab-init/SKILL.md
+├── gitlab-track/SKILL.md
+├── story-breakdown/SKILL.md
+├── issue-draft/SKILL.md
+├── story-workflow/SKILL.md
+├── gitlab-review/SKILL.md
+├── gitlab-story/SKILL.md
 └── gitlab/
     ├── SKILL.md
     ├── assets/              # issue/MR/milestone templates
     ├── issue/SKILL.md
     ├── mr/SKILL.md
-    ├── milestone/SKILL.md
-    ├── resolve/SKILL.md
-    └── parent-issue/SKILL.md
+    ├── plan/SKILL.md
+    └── resolve/SKILL.md
 ```
 
 ## External plugins

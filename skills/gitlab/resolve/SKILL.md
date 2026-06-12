@@ -46,20 +46,43 @@ Before proceeding, announce the choice:
 
 ---
 
-## 3. Short path (bug / fix / chore / technical-debt)
+## 3. Branch setup (always required)
 
-### 3.1 Branch
+Before creating any branch, ask two questions — one at a time:
 
-If not already on a matching branch, create one:
+**Step 1 — Base branch:**
+
+> "Da quale branch vuoi partire? (es. `main`, `develop`, o un altro branch esistente)"
+
+Run `git branch -a` if needed to show available branches. Wait for the answer.
+
+**Step 2 — Branch name confirmation:**
+
+Propose the name following the convention for the chosen path:
+
+- Short path: `fix/N-short-description` (bug/fix) or `chore/N-short-description` (chore/technical-debt)
+- Long path: `feature/N-short-description`
+
+> "Il branch che creerò sarà `<proposed-name>` a partire da `<base-branch>`. Confermo?"
+
+Wait for explicit confirmation. Accept corrections to the name before proceeding.
+
+Then create the branch:
 
 ```bash
-git checkout -b fix/N-short-description    # bug / fix
-git checkout -b chore/N-short-description  # chore / technical-debt (both use the chore/ prefix)
+git checkout <base-branch>
+git checkout -b <confirmed-name>
 ```
 
-Show the proposed name and wait for confirmation before creating it.
+---
 
-### 3.2 Explore the code
+## 4. Short path (bug / fix / chore / technical-debt)
+
+### 4.1 Branch
+
+Already handled in § 3 above. Do not ask again.
+
+### 4.2 Explore the code
 
 Identify all independent domains referenced in the issue (stack traces, paths, symbols, package names). If there are 2 or more independent domains, dispatch one `Explore` agent per domain **in parallel** using the `Agent` tool with `subagent_type=Explore`. Each agent gets:
 
@@ -71,7 +94,7 @@ Wait for all agents to return, then consolidate findings before proceeding.
 
 If only one domain is referenced, use Read, Grep, Glob directly — no agents needed.
 
-### 3.3 Execution plan (if tasks are already listed)
+### 4.3 Execution plan (if tasks are already listed)
 
 After reading the issue, check whether it contains a task list (checklist, bullet list, "Tasks" section, or similar).
 
@@ -87,13 +110,34 @@ Derive an ordered plan from them and show it to the user:
 >
 > Procedo con questo piano? (si/modifiche/annulla)"
 
-Wait for explicit approval. Then implement each task following TDD (§ 3.4).
+Wait for explicit approval. Then implement each task following TDD (§ 4.4).
 
 **If no tasks are present:**
 
-Proceed directly with TDD (§ 3.4), deriving tasks from the issue's acceptance criteria.
+Proceed directly with TDD (§ 4.4), deriving tasks from the issue's acceptance criteria.
 
-### 3.4 TDD implementation
+### 4.4 TDD implementation
+
+**Before writing any code**, check which samber skills (`cc-skills-golang:golang-samber-*`) apply to the service:
+
+```bash
+grep 'github.com/samber/' go.mod
+```
+
+For each samber library found, invoke the corresponding samber skill:
+
+| Library | Skill |
+|---|---|
+| `samber/lo` | `cc-skills-golang:golang-samber-lo` |
+| `samber/mo` | `cc-skills-golang:golang-samber-mo` |
+| `samber/do` | `cc-skills-golang:golang-samber-do` |
+| `samber/oops` | `cc-skills-golang:golang-samber-oops` |
+| `samber/slog-*` | `cc-skills-golang:golang-samber-slog` |
+| `samber/hot` | `cc-skills-golang:golang-samber-hot` |
+| `samber/ro` | `cc-skills-golang:golang-samber-ro` |
+
+"samber" always refers to these `cc-skills-golang:golang-samber-*` skills, not the libraries directly.
+Invoke all applicable samber skills before writing the first line of code (test or implementation).
 
 For each task:
 
@@ -107,7 +151,7 @@ For each task:
 6. Ask before moving to the next task:
    > "Task [n] completato: `[test name]` passa. Continuo con il task [n+1]?"
 
-### 3.5 Completion checklist
+### 4.5 Completion checklist
 
 Before declaring the issue resolved:
 
@@ -116,9 +160,37 @@ Before declaring the issue resolved:
 - [ ] No linter/vet errors (run the project's linter or vet tool).
 - [ ] No dead code or debug artifacts.
 
-### 3.6 Commit and handoff
+### 4.6 Commit and handoff
 
-One commit per task. Intermediate commits use `related to #N`; only the final commit uses `closes #N`:
+One commit per task. Before each commit, follow this two-step pre-commit review:
+
+**Step 1 — Staging review:**
+
+Run and show the staged diff to the developer:
+
+```bash
+git diff --staged
+```
+
+Present the output and ask:
+
+> "Ecco le modifiche in staging per questo commit. Le approvi, vuoi modificare qualcosa, o annulli?"
+
+Wait for explicit approval before proceeding. If the developer requests changes, apply them and repeat from Step 1.
+
+**Step 2 — Commit message proposal:**
+
+Propose the commit message following the convention below. Show it explicitly and ask:
+
+> "Messaggio di commit proposto:
+>
+> `<type>: <description> (<related to #N | closes #N>)`
+>
+> Lo approvi o vuoi modificarlo?"
+
+Wait for explicit confirmation or a corrected message before running `git commit`.
+
+Convention for commit messages:
 
 ```bash
 git commit -m "fix: <description> (related to #N)"      # intermediate — bug / fix
@@ -133,17 +205,13 @@ After the final commit, prompt the user about opening a Merge Request:
 
 ---
 
-## 4. Long path (feature)
+## 5. Long path (feature)
 
-### 4.1 Branch
+### 5.1 Branch
 
-```bash
-git checkout -b feature/N-short-description
-```
+Already handled in § 3 above. Do not ask again.
 
-Show and wait for confirmation before creating.
-
-### 4.2 Explore the code and produce the technical design
+### 5.2 Explore the code and produce the technical design
 
 **Exploration (parallel):** Identify the independent components/packages mentioned in the issue. If there are 2 or more, dispatch one `Explore` agent per component **in parallel** using the `Agent` tool with `subagent_type=Explore`. Each agent gets a focused scope and returns: where the component is defined, its public interface, and which files reference it.
 
@@ -157,19 +225,47 @@ Wait for all agents to return, then consolidate findings.
 
 Wait for explicit approval before continuing.
 
-### 4.3 Implementation plan (inline)
+### 5.3 Implementation plan (inline)
 
 Check whether the feature issue contains a task list. If tasks are already listed, derive the plan from them. If not, derive an ordered task list from the issue's acceptance criteria.
 
 Show the plan in chat. Do NOT start implementation until the user approves.
 
-### 4.4 TDD execution
+### 5.4 TDD execution
 
-Identical to short path §§ 3.4–3.5.
+Identical to short path §§ 4.4–4.5.
 
-### 4.5 Commit and handoff
+### 5.5 Commit and handoff
 
-Intermediate commits use `related to #N`; only the final commit uses `closes #N`:
+Before each commit, follow this two-step pre-commit review:
+
+**Step 1 — Staging review:**
+
+Run and show the staged diff to the developer:
+
+```bash
+git diff --staged
+```
+
+Present the output and ask:
+
+> "Ecco le modifiche in staging per questo commit. Le approvi, vuoi modificare qualcosa, o annulli?"
+
+Wait for explicit approval before proceeding. If the developer requests changes, apply them and repeat from Step 1.
+
+**Step 2 — Commit message proposal:**
+
+Propose the commit message following the convention below. Show it explicitly and ask:
+
+> "Messaggio di commit proposto:
+>
+> `<type>: <description> (<related to #N | closes #N>)`
+>
+> Lo approvi o vuoi modificarlo?"
+
+Wait for explicit confirmation or a corrected message before running `git commit`.
+
+Convention for commit messages (intermediate commits use `related to #N`; only the final commit uses `closes #N`):
 
 ```bash
 git commit -m "feat: <description> (related to #N)"  # intermediate commits
