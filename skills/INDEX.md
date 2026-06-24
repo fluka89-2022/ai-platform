@@ -30,6 +30,7 @@ Invoke with `Skill("<name>")` — only `name` and `description` from frontmatter
 | `story-breakdown` | Breaking down a user story into atomic, implementable GitLab tasks with effort estimates |
 | `issue-draft` | Creating GitLab issue draft `.md` files from a task list or a single task description |
 | `story-workflow` | Full story-to-issues pipeline with persistent state (breakdown → draft → review → publish) |
+| `story-handoff` | Bridges GitLab planning (story-workflow output) to Superpowers — produces a verbatim spec doc for writing-plans |
 | `gitlab-review` | Creating or publishing a merge request on GitLab via glab |
 | `gitlab-story` | Creating a story or epic with branch strategy and child issue management |
 | `gitlab-plan` | Creating, updating, or closing a GitLab milestone |
@@ -59,6 +60,7 @@ skills/
 ├── story-breakdown/SKILL.md
 ├── issue-draft/SKILL.md
 ├── story-workflow/SKILL.md
+├── story-handoff/SKILL.md
 ├── gitlab-review/SKILL.md
 ├── gitlab-story/SKILL.md
 └── gitlab/

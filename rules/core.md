@@ -4,6 +4,7 @@
 
 - **Code, identifiers, comments**: always English.
 - **Documents produced for the team** (specs, designs, audit reports, READMEs, CHANGELOG, anything in `docs/`): Italian, following the `doc-standard` skill (invoked before writing).
+  - **Exception**: when a `superpowers:*` skill orchestrates spec writing (e.g. `superpowers:writing-plans`, `superpowers:brainstorming`), do NOT invoke `doc-standard` or any other skill for `.md` file creation — follow the superpowers skill instructions directly.
 - **Conversation**: match the user's language.
 
 ## Communication

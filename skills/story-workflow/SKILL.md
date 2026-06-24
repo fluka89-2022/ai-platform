@@ -85,7 +85,7 @@ When the user confirms, extract the full task list and update the state file:
       "type": "feature",
       "labels": "...",
       "estimate": "S",
-      "depends_on": null,
+      "depends_on": [],
       "impacted": "..."
     }
   ]
@@ -150,8 +150,20 @@ Report the published issues to the user.
 
 ### `published`
 
-The workflow is complete. Tell the user the summary and the state file location.
-If the user wants to restart for a new iteration, delete the state file and begin again.
+Tell the user the summary and the state file location.
+
+Than tell the user:
+
+> "Workflow completato per storia #<story-id>.
+> Task pubblicati: <lista issue>
+>
+> Vuoi preparare la spec di implementazione per Superpowers?
+> Posso avviare `story-handoff` adesso."
+
+If the user confirms, invoke `story-handoff` with:
+- story_id from state
+- service-path from state
+- task issue IDs from state.published
 
 ---
 
