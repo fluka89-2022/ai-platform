@@ -169,6 +169,18 @@ For each task, in dependency order (tasks with no depends_on first):
    glab fetch command. An agent that loses context mid-session can always recover by
    running that one command.
 
+3. **Go samber libraries (check before writing):**
+Run `grep 'github.com/samber/' go.mod` and for each match invoke
+the corresponding skill before writing any implementation:
+
+| Library        | Skill                                |
+|----------------|--------------------------------------|
+| samber/lo      | cc-skills-golang:golang-samber-lo    |
+| samber/mo      | cc-skills-golang:golang-samber-mo    |
+| samber/do      | cc-skills-golang:golang-samber-do    |
+| samber/oops    | cc-skills-golang:golang-samber-oops  |
+| samber/slog-*  | cc-skills-golang:golang-samber-slog  |
+
 ---
 
 ## Phase 4 — Self-review (silent)
