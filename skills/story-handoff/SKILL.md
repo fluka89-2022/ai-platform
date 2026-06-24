@@ -132,6 +132,20 @@ an ADR is required for that task before implementation begins.>
 <Key technologies, version constraints, and project-wide rules from standards.
 One line each. These become Global Constraints in the writing-plans output.>
 
+**Go samber libraries — required check before any implementation task:**
+Run `grep 'github.com/samber/' go.mod` and invoke the corresponding skill
+for each match before writing any code:
+
+| Library       | Skill                               |
+|---------------|-------------------------------------|
+| samber/lo     | cc-skills-golang:golang-samber-lo   |
+| samber/mo     | cc-skills-golang:golang-samber-mo   |
+| samber/do     | cc-skills-golang:golang-samber-do   |
+| samber/oops   | cc-skills-golang:golang-samber-oops |
+| samber/slog-* | cc-skills-golang:golang-samber-slog |
+| samber/hot    | cc-skills-golang:golang-samber-hot  |
+| samber/ro     | cc-skills-golang:golang-samber-ro   |
+
 ## Tasks
 
 For each task, in dependency order (tasks with no depends_on first):
@@ -169,17 +183,7 @@ For each task, in dependency order (tasks with no depends_on first):
    glab fetch command. An agent that loses context mid-session can always recover by
    running that one command.
 
-3. **Go samber libraries (check before writing):**
-Run `grep 'github.com/samber/' go.mod` and for each match invoke
-the corresponding skill before writing any implementation:
 
-| Library        | Skill                                |
-|----------------|--------------------------------------|
-| samber/lo      | cc-skills-golang:golang-samber-lo    |
-| samber/mo      | cc-skills-golang:golang-samber-mo    |
-| samber/do      | cc-skills-golang:golang-samber-do    |
-| samber/oops    | cc-skills-golang:golang-samber-oops  |
-| samber/slog-*  | cc-skills-golang:golang-samber-slog  |
 
 ---
 
